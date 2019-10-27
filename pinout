@@ -1,0 +1,16 @@
+PINOUT:
+
+MOSI: 14
+SCLK: 13
+DC: 26
+CS: 25
+
+###### ESP32 ####
+MOSI: 23
+SCLK: 18
+D/C: 26
+CS: 5
+
+###### i2c test #####
+SDA 21
+SCL	22 
