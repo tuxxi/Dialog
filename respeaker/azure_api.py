@@ -40,7 +40,7 @@ class BingSpeechAPI:
     def __init__(self, key=os.getenv('BING_KEY', '')):
         self.key = key
         if self.key is None:
-            raise KeyError("NO API KEY")
+            raise KeyError("NO API KEY GIVEN!")
 
         self.access_token = None
         self.expire_time = None
@@ -99,7 +99,6 @@ class BingSpeechAPI:
 
     def recognize(self, audio_data, language="en-US", show_all=False):
         self.authenticate()
-        print("authenticated")
         if isinstance(audio_data, types.GeneratorType):
             def generate(audio):
                 yield self.get_wav_header()
@@ -128,7 +127,6 @@ class BingSpeechAPI:
         }
 
         url = "https://westus.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=en-US"
-        print "pinging %s" % url
         response = self.session.post(url, params=params, headers=headers, data=data)
 
         if response.status_code != 200:
@@ -138,9 +136,9 @@ class BingSpeechAPI:
 
         if show_all:
             return result
-        if "header" not in result or "lexical" not in result["header"]:
+        if "DisplayText" not in result:
             raise ValueError('Unexpected response: {}'.format(result))
-        return result["header"]["lexical"]
+        return result["DisplayText"]
 
     def synthesize(self, text, language="en-US", gender="Female", stream=None, chunk_size=4096):
         self.authenticate()
